@@ -119,7 +119,7 @@ contract BuyWithToken is Ownable {
 
         ( address assetAddress, uint256 assetID, uint256 price, string memory currency , address seller ) = ( item.assetAddress, item.assetID, item.price, item.currency , item.seller);
 
-        address contractAddress = 0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984;
+        address contractAddress = tokenDetails[_token].contractAddress;
         uint256 amount = uint256(getSwapTokenPrice(currency,_token,int256(price)));
         IERC20(contractAddress).transferFrom(msg.sender,seller,amount);
         IERC721(assetAddress).transferFrom(address(this),msg.sender,assetID);
