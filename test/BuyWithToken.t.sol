@@ -33,8 +33,8 @@ contract BuyWithTokenTest is Test {
         testListAsset();
         vm.deal(0x748dE14197922c4Ae258c7939C7739f3ff1db573,10000000 ether);
         vm.startPrank(0x748dE14197922c4Ae258c7939C7739f3ff1db573);
-        IERC20(0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984).approve(address(market), 100000000000);
-        market.buyAssetWithToken(1);    
+        IERC20(0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984).approve(address(market), 100000000000000000000000000);
+        market.buyAssetWithToken(1, "UNI");    
     }
 
     // function testExchange() public view {
