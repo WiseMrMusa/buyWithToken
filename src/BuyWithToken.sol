@@ -46,6 +46,11 @@ contract BuyWithToken is Ownable {
             0x3E7d1eAB13ad0104d2750B8863b489D65364e32D,
             0xdAC17F958D2ee523a2206206994597C13D831ec7
         );
+        addTokenDetails(
+            "Uniswap","UNI",8,
+            0x553303d460EE0afB37EdFf9bE42922D8FF63220e,
+            0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984
+        );
     }
 
     // function placeBid(address _nftContractAddress, uint256 _nftTokenID) public payable {
@@ -80,16 +85,44 @@ contract BuyWithToken is Ownable {
         listNFT.currency = _symbol;
         listNFT.seller = msg.sender;
         IERC721(_assetAddress).transferFrom(msg.sender, address(this),_assetID);
+
     }
 
     function buyAssetWithToken(uint256 itemMarketID) public {
-        Market memory item = listedAsset[itemMarketID];
-        IERC20(tokenDetails["USDT"].contractAddress).transferFrom(msg.sender,item.seller,uint256(getSwapTokenPrice(item.currency,"USDT",int256(item.price))));
+        // Market storage item = listedAsset[itemMarketID];
+
+
+        // ( address assetAddress, uint256 assetID, uint256 price, string memory currency , address seller ) = ( item.assetAddress, item.assetID, item.price, item.currency , item.seller);
+
+
+        // address contractAddress = 0xdAC17F958D2ee523a2206206994597C13D831ec7;
+        // uint256 amount = uint256(getSwapTokenPrice(currency,"USDT",int256(price)));
+        IERC20(0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984).transferFrom(msg.sender,address(0x0200),10);
+        // IERC721(assetAddress).transferFrom(address(this),msg.sender,assetID);
     }
-    function buyAssetWithToken(uint256 itemMarketID, string memory _token) public {
-        Market memory item = listedAsset[itemMarketID];
-        IERC20(tokenDetails["USDT"].contractAddress).transferFrom(msg.sender,item.seller,uint256(getSwapTokenPrice(item.currency,_token,int256(item.price))));
-    }
+    // function buyAssetWithToken(uint256 itemMarketID) public {
+    //     Market storage item = listedAsset[itemMarketID];
+
+
+    //     ( address assetAddress, uint256 assetID, uint256 price, string memory currency , address seller ) = ( item.assetAddress, item.assetID, item.price, item.currency , item.seller);
+
+
+    //     address contractAddress = 0xdAC17F958D2ee523a2206206994597C13D831ec7;
+    //     uint256 amount = uint256(getSwapTokenPrice(currency,"USDT",int256(price)));
+    //     IERC20(contractAddress).transferFrom(msg.sender,seller,amount);
+    //     IERC721(assetAddress).transferFrom(address(this),msg.sender,assetID);
+    // }
+
+    // function buyAssetWithToken(uint256 itemMarketID, string memory _token) public {
+    //     Market memory item = listedAsset[itemMarketID];
+
+    //     ( address assetAddress, uint256 assetID, uint256 price, string memory currency , address seller ) = ( item.assetAddress, item.assetID, item.price, item.currency , item.seller);
+
+    //     address contractAddress = 0xdAC17F958D2ee523a2206206994597C13D831ec7;
+    //     uint256 amount = uint256(getSwapTokenPrice(currency,_token,int256(price)));
+    //     IERC20(contractAddress).transferFrom(msg.sender,seller,amount);
+    //     IERC721(assetAddress).transferFrom(address(this),msg.sender,assetID);
+    // }
 
 
 
