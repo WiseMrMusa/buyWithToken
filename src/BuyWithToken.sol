@@ -29,6 +29,25 @@ contract BuyWithToken is Ownable {
         address seller;
     }
 
+    /// @dev This maps the token address to the aggregator's address
+    uint256 itemID;
+    mapping (string => address) private aggregrator;
+    mapping (string => Token) private tokenDetails;
+    mapping (uint256 => Market) private listedAsset;
+
+    constructor(){
+        addTokenDetails(
+            "Ethereum","ETH",18,
+            0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419,
+            0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2
+        );
+        addTokenDetails(
+            "Tether USD","USDT",8,
+            0x3E7d1eAB13ad0104d2750B8863b489D65364e32D,
+            0xdAC17F958D2ee523a2206206994597C13D831ec7
+        );
+    }
+
     // function placeBid(address _nftContractAddress, uint256 _nftTokenID) public payable {
     //     NFTAuction storage bidNFT = nftAuctionDetails[_nftContractAddress][_nftTokenID];
     //     require(bidNFT.nftOwner != address(0), "This NFT is not for auction");
@@ -49,8 +68,9 @@ contract BuyWithToken is Ownable {
         listNFT.price = _price;
         listNFT.currency = "ETH";
         listNFT.seller = msg.sender;
-        IERC721(_assetAddress).approve(address(this),_assetID);
+        IERC721(_assetAddress).transferFrom(msg.sender, address(this),_assetID);
     }
+
     function listAsset(address _assetAddress, uint256 _assetID, uint256 _price, string calldata _symbol) public {
         itemID++;
         Market storage listNFT = listedAsset[itemID];
@@ -59,7 +79,7 @@ contract BuyWithToken is Ownable {
         listNFT.price = _price;
         listNFT.currency = _symbol;
         listNFT.seller = msg.sender;
-        IERC721(_assetAddress).approve(address(this),_assetID);
+        IERC721(_assetAddress).transferFrom(msg.sender, address(this),_assetID);
     }
 
     function buyAssetWithToken(uint256 itemMarketID) public {
@@ -71,24 +91,7 @@ contract BuyWithToken is Ownable {
         IERC20(tokenDetails["USDT"].contractAddress).transferFrom(msg.sender,item.seller,uint256(getSwapTokenPrice(item.currency,_token,int256(item.price))));
     }
 
-    /// @dev This maps the token address to the aggregator's address
-    uint256 itemID;
-    mapping (string => address) private aggregrator;
-    mapping (string => Token) private tokenDetails;
-    mapping (uint256 => Market) private listedAsset;
 
-    constructor(){
-        addTokenDetails(
-            "Ethereum","ETH",18,
-            0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419,
-            0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2
-        );
-        addTokenDetails(
-            "Tether USD","USDT",8,
-            0x3E7d1eAB13ad0104d2750B8863b489D65364e32D,
-            0xdAC17F958D2ee523a2206206994597C13D831ec7
-        );
-    }
 
     // function addAggregator(string calldata _tokenName, address _aggregatorAddress) external onlyOwner() {
     //     require(aggregrator[_tokenName] == address(0),"Aggregator Address already exist!");

@@ -3,6 +3,7 @@ pragma solidity ^0.8.13;
 
 import "forge-std/Test.sol";
 import "../src/BuyWithToken.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
 contract BuyWithTokenTest is Test {
     BuyWithToken market;
@@ -13,18 +14,26 @@ contract BuyWithTokenTest is Test {
         market = new BuyWithToken();
     }
 
-    function testExchange() public view {
-        market.getSwapTokenPrice("ETH","USDT",1);
-        // console.log(us);
-        // buy.getSwapTokenPrice("DAI","GBP",8,500);
-        // buy.getSwapTokenPrice("FORTH","LINK",8,200);
-        // buy.getSwapTokenPrice("CZK","BTC",8,1000);
-        // buy.getSwapTokenPrice("JPY","EUR",8,75);
-        // buy.getSwapTokenPrice("ETH","USDC",8,3.2 ether);
-
-        // 614_880_141_589_000_000_000_000_000_000
-        // 1756.80_040_454
-        // 1756.80_040_454
+    function testListAsset() public {
+        vm.startPrank(0xC8E04d79c9b84ccE230b7495B57b25F8c59A27be);
+        IERC721(0x6B5d28442aF2444F66F8f2883Df30089E3fb840E).approve(address(market),31);
+        market.listAsset(0x6B5d28442aF2444F66F8f2883Df30089E3fb840E,31,20);
+        assertEq(IERC721(0x6B5d28442aF2444F66F8f2883Df30089E3fb840E).ownerOf(31),address(market));
+        vm.stopPrank();
     }
+
+    // function testExchange() public view {
+    //     market.getSwapTokenPrice("ETH","USDT",1);
+    //     // console.log(us);
+    //     // buy.getSwapTokenPrice("DAI","GBP",8,500);
+    //     // buy.getSwapTokenPrice("FORTH","LINK",8,200);
+    //     // buy.getSwapTokenPrice("CZK","BTC",8,1000);
+    //     // buy.getSwapTokenPrice("JPY","EUR",8,75);
+    //     // buy.getSwapTokenPrice("ETH","USDC",8,3.2 ether);
+
+    //     // 614_880_141_589_000_000_000_000_000_000
+    //     // 1756.80_040_454
+    //     // 1756.80_040_454
+    // }
 
 }
